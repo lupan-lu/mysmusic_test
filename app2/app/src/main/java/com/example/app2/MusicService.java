@@ -11,11 +11,20 @@ import android.content.IntentFilter;
 public class MusicService extends Service {
     private MediaPlayer mediaPlayer;
     private BroadcastReceiver receiver;
+    private String currentMusicPath;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnCompletionListener(mp -> {
+            // Auto-play next song when current finishes
+            // Could implement next song logic here
+        });
+        mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+            Toast.makeText(this, "播放错误", Toast.LENGTH_SHORT).show();
+            return true;
+        });
         
         receiver = new BroadcastReceiver() {
             @Override
@@ -30,7 +39,23 @@ public class MusicService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // TODO: 实现音乐播放
+        if (intent != null) {
+            String musicPath = intent.getStringExtra("music_path");
+            if (musicPath != null) {
+                try {
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.stop();
+                    }
+                    mediaPlayer.reset();
+                    mediaPlayer.setDataSource(musicPath);
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                } catch (Exception e) {
+                    Toast.makeText(this, "无法播放音乐: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+        }
         return START_STICKY;
     }
 
