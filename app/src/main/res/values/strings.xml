@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Music</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="no_songs">No songs found</string>
+    <string name="now_playing">Now Playing</string>
 </resources>
