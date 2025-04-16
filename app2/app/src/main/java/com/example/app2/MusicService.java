@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.widget.Toast;
 
 public class MusicService extends Service {
     private MediaPlayer mediaPlayer;
@@ -22,7 +23,9 @@ public class MusicService extends Service {
             // Could implement next song logic here
         });
         mediaPlayer.setOnErrorListener((mp, what, extra) -> {
-            Toast.makeText(this, "播放错误", Toast.LENGTH_SHORT).show();
+            if (this != null) {
+                Toast.makeText(this, "播放错误", Toast.LENGTH_SHORT).show();
+            }
             return true;
         });
         
@@ -51,7 +54,9 @@ public class MusicService extends Service {
                     mediaPlayer.prepare();
                     mediaPlayer.start();
                 } catch (Exception e) {
-                    Toast.makeText(this, "无法播放音乐: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (this != null) {
+                        Toast.makeText(this, "无法播放音乐: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                     e.printStackTrace();
                 }
             }
