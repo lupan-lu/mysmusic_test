@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends com.example.app2.AppCompatActivity {
     private static final int REQUEST_PERMISSION = 1;
     private Button btnPlay, btnPause, btnStop;
     private ListView musicList;
