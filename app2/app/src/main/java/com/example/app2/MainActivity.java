@@ -51,22 +51,34 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity {
     }
 
     private void loadMusic() {
-        // 示例音乐文件路径 - 实际项目中应该扫描存储
-        String[] sampleMusic = {
-            "/sdcard/Music/song1.mp3",
-            "/sdcard/Music/song2.mp3"
-        };
+        File musicDir = new File("/storage/FE7C-19FA/Music");
+        ArrayList<String> musicFiles = new ArrayList<>();
+
+        if (musicDir.exists() && musicDir.isDirectory()) {
+            File[] files = musicDir.listFiles((dir, name) -> 
+                name.toLowerCase().endsWith(".mp3"));
+            
+            if (files != null) {
+                for (File file : files) {
+                    musicFiles.add(file.getAbsolutePath());
+                }
+            }
+        }
+
+        if (musicFiles.isEmpty()) {
+            Toast.makeText(this, R.string.no_music_found, Toast.LENGTH_SHORT).show();
+        }
         
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
             this,
             android.R.layout.simple_list_item_1,
-            sampleMusic
+            musicFiles
         );
         musicList.setAdapter(adapter);
         
         musicList.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(this, MusicService.class);
-            intent.putExtra("music_path", sampleMusic[position]);
+            intent.putExtra("music_path", musicFiles.get(position));
             startService(intent);
         });
     }
